@@ -157,6 +157,22 @@ RSpec.describe Satoshis do
     end
   end
 
+  describe "#-" do
+    let(:value_1) { described_class.new(50000000) }
+
+    let(:value_2) { described_class.new(40000000) }
+
+    let(:difference) { value_1 - value_2 }
+
+    it "retruns a Satoshis instance" do
+      expect(difference.class).to eq described_class
+    end
+
+    it "returns the correct value (10000000 satoshis)" do
+      expect(difference.value).to eq 10000000
+    end
+  end
+
   describe "#to_s" do
     subject(:money) { described_class.new(0) }
 

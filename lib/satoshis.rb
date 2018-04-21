@@ -40,6 +40,11 @@ class Satoshis
     Satoshis.new(sum)
   end
 
+  def -(subtrahend)
+    difference = value - subtrahend.value
+    Satoshis.new(difference)
+  end
+
   def string
     result = value.abs.to_s
 
