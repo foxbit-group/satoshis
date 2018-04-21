@@ -24,3 +24,7 @@ Metrics/BlockLength:
 
 RSpec/ExampleLength:
   Max: 20
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Exclude:
+    - "spec/satoshis_spec.rb"
