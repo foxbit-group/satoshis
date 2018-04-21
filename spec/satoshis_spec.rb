@@ -49,94 +49,84 @@ RSpec.describe Satoshis do
     [-999999999999999999 , "-9999999999.99999999" , "-9999999999.99999999"],
   ]
 
-  describe ".from_integer" do
-    describe "passing nil as argument" do
+  describe ".new" do
+    context "with nil as argument" do
       it "raises ArgumentError" do
-        expect { described_class.from_integer(nil) }.to raise_error ArgumentError
+        expect { described_class.new(nil) }.to raise_error ArgumentError
       end
     end
 
-    describe "#value" do
-      valid_cases.each do |c|
-        integer = c[0]
+    context "with an integer" do
+      describe "#value" do
+        valid_cases.each do |c|
+          integer = c[0]
 
-        it "from #{integer} to #{integer}" do
-          expect(described_class.from_integer(integer).value).to eq integer
+          it "from #{integer} to #{integer}" do
+            expect(described_class.new(integer).value).to eq integer
+          end
+        end
+      end
+
+      describe "#string" do
+        valid_cases.each do |c|
+          integer         = c[0]
+          string_complete = c[2]
+
+          it "from #{integer} to #{string_complete}" do
+            expect(described_class.new(integer).string).to eq string_complete
+          end
+        end
+      end
+
+      describe "#string_formatted" do
+        valid_cases.each do |c|
+          integer = c[0]
+          string  = c[1]
+
+          it "from #{integer} to #{string}" do
+            expect(described_class.new(integer).string_formatted).to eq string
+          end
         end
       end
     end
 
-    describe "#string" do
-      valid_cases.each do |c|
-        integer         = c[0]
-        string_complete = c[2]
+    context "with a BigDecimal" do
+      describe "#value" do
+        valid_cases.each do |c|
+          string  = c[1]
+          integer = c[0]
 
-        it "from #{integer} to #{string_complete}" do
-          expect(described_class.from_integer(integer).string).to eq string_complete
+          it "from #{string} to #{integer}" do
+            expect(described_class.new(BigDecimal.new(string)).value).to eq integer
+          end
+        end
+      end
+
+      describe "#string" do
+        valid_cases.each do |c|
+          string          = c[1]
+          string_complete = c[2]
+
+          it "from #{string} to #{string_complete}" do
+            expect(described_class.new(BigDecimal.new(string)).string).to eq string_complete
+          end
+        end
+      end
+
+      describe "#string_formatted" do
+        valid_cases.each do |c|
+          string = c[1]
+
+          it "from #{string} to #{string} (keep the same)" do
+            expect(described_class.new(BigDecimal.new(string)).string_formatted).to eq string
+          end
         end
       end
     end
 
-    describe "#string_formatted" do
-      valid_cases.each do |c|
-        integer = c[0]
-        string  = c[1]
-
-        it "from #{integer} to #{string}" do
-          expect(described_class.from_integer(integer).string_formatted).to eq string
-        end
-      end
-    end
-  end
-
-  describe ".from_big_decimal" do
-    describe "passing nil as argument" do
-      it "raises ArgumentError" do
-        expect { described_class.from_big_decimal(nil) }.to raise_error ArgumentError
-      end
-    end
-
-    describe "#value" do
-      valid_cases.each do |c|
-        string  = c[1]
-        integer = c[0]
-
-        it "from #{string} to #{integer}" do
-          expect(described_class.from_big_decimal(BigDecimal.new(string)).value).to eq integer
-        end
-      end
-    end
-
-    describe "#string" do
-      valid_cases.each do |c|
-        string          = c[1]
-        string_complete = c[2]
-
-        it "from #{string} to #{string_complete}" do
-          expect(described_class.from_big_decimal(BigDecimal.new(string)).string).to eq string_complete
-        end
-      end
-    end
-
-    describe "#string_formatted" do
-      valid_cases.each do |c|
-        string = c[1]
-
-        it "from #{string} to #{string} (keep the same)" do
-          expect(described_class.from_big_decimal(BigDecimal.new(string)).string_formatted).to eq string
-        end
-      end
-    end
-  end
-
-  describe ".from_string" do
-    it "uses the method .from_big_decimal" do
-      expect(described_class.from_string("42.00000042").value).to eq 4200000042
-    end
-
-    describe "passing nil as argument" do
-      it "raises ArgumentError" do
-        expect { described_class.from_big_decimal(nil) }.to raise_error ArgumentError
+    context "with a String" do
+      it "convert to BigDecimal" do
+        expect(described_class.new("42.00000042").value).to eq 4200000042
       end
     end
   end

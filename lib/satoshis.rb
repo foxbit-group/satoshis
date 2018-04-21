@@ -12,27 +12,16 @@ class Satoshis
   attr_reader :value
 
   def initialize(value)
-    @value = value
-  end
-
-  class << self
-    def from_integer(value)
-      raise(ArgumentError, "value must be an Integer") unless value.is_a? Integer
-
-      new(value)
-    end
-
-    def from_big_decimal(bitcoins)
-      raise(ArgumentError, "bitcoins must be a BigDecimal") unless bitcoins.is_a? BigDecimal
-
-      new((bitcoins * ONE).to_i)
-    end
-
-    def from_string(bitcoins)
-      raise(ArgumentError, "bitcoins must be a String") unless bitcoins.is_a? String
-
-      Satoshis.from_big_decimal(bitcoins.to_d)
-    end
+    @value = \
+      if value.is_a?(Integer)
+        value
+      elsif value.is_a?(BigDecimal)
+        (value * ONE).to_i
+      elsif value.is_a?(String)
+        initialize(value.to_d)
+      else
+        raise(ArgumentError, "The argument 'value' must be Integer, BigDecimal or String.")
+      end
   end
 
   def +(addend)
