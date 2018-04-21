@@ -3,6 +3,8 @@
 require "bundler/setup"
 require "pry-byebug"
 require "satoshis"
+require "simplecov"
+require "simplecov-console"
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"
@@ -13,3 +15,6 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+SimpleCov.formatter = SimpleCov.formatter = SimpleCov::Formatter::Console
+SimpleCov.start
