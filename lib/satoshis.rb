@@ -35,6 +35,11 @@ class Satoshis
     end
   end
 
+  def +(addend)
+    sum = value + addend.value
+    Satoshis.new(sum)
+  end
+
   def string
     result = value.abs.to_s
 

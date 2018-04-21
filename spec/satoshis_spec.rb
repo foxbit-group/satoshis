@@ -141,6 +141,22 @@ RSpec.describe Satoshis do
     end
   end
 
+  describe "#+" do
+    let(:value_1) { described_class.new(2000) }
+
+    let(:value_2) { described_class.new(3000) }
+
+    let(:sum) { value_1 + value_2 }
+
+    it "retruns a Satoshis instance" do
+      expect(sum.class).to eq described_class
+    end
+
+    it "returns the correct value (5000 satoshis)" do
+      expect(sum.value).to eq 5000
+    end
+  end
+
   describe "#to_s" do
     subject(:money) { described_class.new(0) }
 
