@@ -2,9 +2,10 @@
 
 require "bundler/setup"
 require "pry-byebug"
-require "satoshis"
 require "simplecov"
 require "simplecov-console"
+
+require "satoshis"
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"
