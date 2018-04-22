@@ -7,6 +7,45 @@
 
 A Ruby gem to manipulate Bitcoin money without loss of precision.
 
+## Why?
+
+In simple operations like `0.3 - 0.1` (using `Float` data types) the result may be a bit strange:
+
+```ruby
+difference = 0.3 - 0.1
+
+puts difference
+# 0.19999999999999998
+```
+
+Using the **Satoshis** gem you get:
+
+```ruby
+difference = Satoshis.new("0.3") - Satoshis.new("0.1")
+
+puts difference.to_s
+# "0.2"
+```
+
+And you can do some conversions of bitcoin values:
+
+```ruby
+satoshis = 420000
+amount   = Satoshis.new(satoshis)
+
+puts amount.to_s
+# "0.0042"
+# String
+
+puts amount.to_d
+# 0.42e-2
+# BigDecimal
+
+puts amount.to_i
+# 420000
+# Integer (satoshis)
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -17,8 +56,12 @@ gem "satoshis"
 
 And then execute:
 
-    $ bundle
+```shell
+bundle install
+```
 
 Or install it yourself as:
 
-    $ gem install satoshis
+```shell
+gem install satoshis
+```

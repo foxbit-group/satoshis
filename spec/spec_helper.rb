@@ -17,5 +17,5 @@ RSpec.configure do |config|
   end
 end
 
-SimpleCov.formatter = SimpleCov.formatter = SimpleCov::Formatter::Console
+SimpleCov.formatter = SimpleCov::Formatter::Console
 SimpleCov.start

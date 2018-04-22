@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "spec_helper"
+
 RSpec.describe Satoshis do
   it "has a version number" do
     expect(Satoshis::VERSION).not_to be nil
@@ -52,7 +54,13 @@ RSpec.describe Satoshis do
   describe ".new" do
     context "with nil as argument" do
       it "raises ArgumentError" do
-        expect { described_class.new(nil) }.to raise_error ArgumentError
+        expect { described_class.new(nil) }.to raise_error ArgumentError, "Value can't be nil."
+      end
+    end
+
+    context "with a value that is not Integer, BigDecimal or String" do
+      it "raises ArgumentError" do
+        expect { described_class.new(0.1) }.to raise_error ArgumentError, "Value must be Integer, BigDecimal or String."
       end
     end
 
@@ -67,24 +75,24 @@ RSpec.describe Satoshis do
         end
       end
 
-      describe "#string" do
-        valid_cases.each do |c|
-          integer         = c[0]
-          string_complete = c[2]
-
-          it "from #{integer} to #{string_complete}" do
-            expect(described_class.new(integer).string).to eq string_complete
-          end
-        end
-      end
-
-      describe "#string_formatted" do
+      describe "#formatted" do
         valid_cases.each do |c|
           integer = c[0]
           string  = c[1]
 
           it "from #{integer} to #{string}" do
-            expect(described_class.new(integer).string_formatted).to eq string
+            expect(described_class.new(integer).formatted).to eq string
+          end
+        end
+      end
+
+      describe "#formatted with short: false" do
+        valid_cases.each do |c|
+          integer         = c[0]
+          string_complete = c[2]
+
+          it "from #{integer} to #{string_complete}" do
+            expect(described_class.new(integer).formatted(short: false)).to eq string_complete
           end
         end
       end
@@ -102,31 +110,79 @@ RSpec.describe Satoshis do
         end
       end
 
-      describe "#string" do
+      describe "#formatted" do
+        valid_cases.each do |c|
+          string = c[1]
+
+          it "from #{string} to #{string} (keep the same)" do
+            expect(described_class.new(BigDecimal.new(string)).formatted).to eq string
+          end
+        end
+      end
+
+      describe "#formatted with short: false" do
         valid_cases.each do |c|
           string          = c[1]
           string_complete = c[2]
 
           it "from #{string} to #{string_complete}" do
-            expect(described_class.new(BigDecimal.new(string)).string).to eq string_complete
-          end
-        end
-      end
-
-      describe "#string_formatted" do
-        valid_cases.each do |c|
-          string = c[1]
-
-          it "from #{string} to #{string} (keep the same)" do
-            expect(described_class.new(BigDecimal.new(string)).string_formatted).to eq string
+            expect(described_class.new(BigDecimal.new(string)).formatted(short: false)).to eq string_complete
           end
         end
       end
     end
 
     context "with a String" do
-      it "convert to BigDecimal" do
-        expect(described_class.new("42.00000042").value).to eq 4200000042
+      describe "#value" do
+        valid_cases.each do |c|
+          string  = c[1]
+          integer = c[0]
+
+          it "from #{string} to #{integer}" do
+            expect(described_class.new(string).value).to eq integer
+          end
+        end
+      end
+
+      describe "#formatted" do
+        valid_cases.each do |c|
+          string = c[1]
+
+          it "from #{string} to #{string} (keep the same)" do
+            expect(described_class.new(string).formatted).to eq string
+          end
+        end
+      end
+
+      describe "#formatted with short: false" do
+        valid_cases.each do |c|
+          string          = c[1]
+          string_complete = c[2]
+
+          it "from #{string} to #{string_complete}" do
+            expect(described_class.new(string).formatted(short: false)).to eq string_complete
+          end
+        end
+      end
+    end
+  end
+
+  describe ".ensure_integer" do
+    context "with a Integer" do
+      it "returns that Integer" do
+        expect(described_class.ensure_integer(123)).to eq 123
+      end
+    end
+
+    context "with a BigDecimal" do
+      it "returns the equivalent Integer" do
+        expect(described_class.ensure_integer(BigDecimal.new("1.001"))).to eq 100100000
+      end
+    end
+
+    context "with a String" do
+      it "returns the equivalent Integer" do
+        expect(described_class.ensure_integer("42.000042")).to eq 4200004200
       end
     end
   end
@@ -164,16 +220,44 @@ RSpec.describe Satoshis do
   end
 
   describe "#to_s" do
-    subject(:money) { described_class.new(0) }
+    subject(:amount) { described_class.new(42) }
 
-    it "is an alias to string_formatted method" do
-      expect(money.method(:to_s)).to eq money.method(:string_formatted)
+    it "is an alias to formatted" do
+      expect(amount.method(:to_s)).to eq amount.method(:formatted)
     end
   end
 
   describe "#to_d" do
     it "returns the value in BigDecimal format" do
       expect(described_class.new(4200000042).to_d).to eq BigDecimal.new("42.00000042")
+    end
+  end
+
+  describe "#positive?" do
+    context "with zero" do
+      specify { expect(described_class.new(0).positive?).to eq false }
+    end
+
+    context "with 1" do
+      specify { expect(described_class.new(1).positive?).to eq true }
+    end
+
+    context "with -1" do
+      specify { expect(described_class.new(-1).positive?).to eq false }
+    end
+  end
+
+  describe "#negative?" do
+    context "with zero" do
+      specify { expect(described_class.new(0).negative?).to eq false }
+    end
+
+    context "with 1" do
+      specify { expect(described_class.new(1).negative?).to eq false }
+    end
+
+    context "with -1" do
+      specify { expect(described_class.new(-1).negative?).to eq true }
     end
   end
 end
