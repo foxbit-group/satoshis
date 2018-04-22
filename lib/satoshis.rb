@@ -7,7 +7,7 @@ require "forwardable"
 class Satoshis
   extend Forwardable
 
-  VERSION = "0.1.0"
+  VERSION = "0.2.0"
 
   PRECISION = 8
   ONE       = 100_000_000
