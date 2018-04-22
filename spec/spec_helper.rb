@@ -2,8 +2,6 @@
 
 require "bundler/setup"
 require "pry-byebug"
-require "simplecov"
-require "simplecov-console"
 
 require "satoshis"
 
@@ -16,6 +14,3 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
-
-SimpleCov.formatter = SimpleCov::Formatter::Console
-SimpleCov.start
