@@ -64,3 +64,16 @@ Or install it yourself as:
 ```shell
 gem install satoshis
 ```
+
+## Custom Precision
+
+Use the class `CoinDecimal` passing the argument `precision`:
+
+```ruby
+satoshis = 42
+amount   = CoinDecimal.new(satoshis, 10)
+
+puts amount.to_s
+# "0.0000000042"
+# String
+```
