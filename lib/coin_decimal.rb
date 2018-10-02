@@ -15,7 +15,7 @@ class CoinDecimal
 
     raise(ArgumentError, "Precision must be less than or equal to #{MAX_PRECISION}.") if precision > MAX_PRECISION
 
-    raise(ArgumentError, "Precision can't be negative.") if precision.negative?
+    raise(ArgumentError, "Precision can't be negative.") if precision < 0
 
     @precision = precision
 
