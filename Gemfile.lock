@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    satoshis (0.2.0)
+    satoshis (0.3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -64,4 +64,4 @@ DEPENDENCIES
   satoshis!
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

@@ -27,7 +27,7 @@ RSpec/ExampleLength:
 
 Layout/SpaceInsideArrayLiteralBrackets:
   Exclude:
-    - "spec/lib/satoshis_spec.rb"
+    - "spec/lib/*.rb"
 
 RSpec/NestedGroups:
   Max: 4

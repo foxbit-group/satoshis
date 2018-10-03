@@ -1,7 +1,7 @@
 # Satoshis
 
-[![Build Status](https://travis-ci.org/bsoares/satoshis.svg?branch=master)](https://travis-ci.org/bsoares/satoshis)
-[![Maintainability](https://api.codeclimate.com/v1/badges/69b087f6c2d3cfbb0fa2/maintainability)](https://codeclimate.com/github/bsoares/satoshis/maintainability)
+[![Build Status](https://travis-ci.org/modiax/satoshis.svg?branch=master)](https://travis-ci.org/modiax/satoshis)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ecc1fffe44770ac83ae7/maintainability)](https://codeclimate.com/github/modiax/satoshis/maintainability)
 [![Gem Version](https://badge.fury.io/rb/satoshis.svg)](https://badge.fury.io/rb/satoshis)
 
 A Ruby gem to manipulate Bitcoin money without loss of precision.
@@ -63,4 +63,17 @@ Or install it yourself as:
 
 ```shell
 gem install satoshis
+```
+
+## Custom Precision
+
+Use the class `CoinDecimal` passing the argument `precision`:
+
+```ruby
+satoshis = 42
+amount   = CoinDecimal.new(satoshis, 10)
+
+puts amount.to_s
+# "0.0000000042"
+# String
 ```
